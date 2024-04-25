@@ -24,14 +24,6 @@ void ASpiral::OnConstruction(const FTransform& Transform)
 	}
 }
 
-FTransform ASpiral::GetTransformAtDistance(float Distance)
-{
-	FTransform ret;
-
-
-	return ret;
-}
-
 FVector ASpiral::GetPositionAtDistance(float Distance)
 {
 	if (Distance < 0) Distance = 0;
@@ -63,7 +55,7 @@ FVector ASpiral::GetPositionAtDistance(float Distance)
 	}
 	else
 	{
-		radius = UKismetMathLibrary::Lerp(alpha, DefaultRadius, DefaultEndRadius);
+		radius = UKismetMathLibrary::Lerp(DefaultRadius, DefaultEndRadius, alpha);
 	}
 
 	//rotate our right vector around the forward vector axis of rotation by the theta value amount
@@ -100,7 +92,7 @@ FVector ASpiral::GetPositionAtAngle(float theta)
 	}
 	else
 	{
-		radius = UKismetMathLibrary::Lerp(alpha, DefaultRadius, DefaultEndRadius);
+		radius = UKismetMathLibrary::Lerp(DefaultRadius, DefaultEndRadius, alpha);
 	}
 
 	//rotate our right vector around the forward vector axis of rotation by the theta value amount
@@ -120,12 +112,24 @@ void ASpiral::DrawDebugSpiral()
 
 		//UKismetSystemLibrary::DrawDebugPoint(World, xform.GetLocation(), 10, FLinearColor::Red, 15);
 
-		float r = 0;
+		/*float r = 0;
 		float rMax = ThetaStart + SpiralCount * 360.0f;
 		while (r < rMax)
 		{
 			UKismetSystemLibrary::DrawDebugPoint(World, GetPositionAtAngle(r), 10, FLinearColor::Red, 15);
 			r += 1;
+		}*/
+
+		float length = BaseTrack->GetSplineLength();
+		const float stepSize = 0.1f;
+		float d = 0;
+		FVector lastPos = GetPositionAtDistance(0);
+		while (d < length)
+		{
+			d += stepSize;
+			FVector curPos = GetPositionAtDistance(d);
+			UKismetSystemLibrary::DrawDebugLine(World, lastPos, curPos, FLinearColor::Red, 30);
+			lastPos = curPos;
 		}
 
 	}

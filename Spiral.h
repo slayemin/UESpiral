@@ -58,17 +58,13 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Debug")
 		bool bDrawDebug = false;
 
-	//For the given distance along the base track, we get a transform for the corresponding spiral position
+	//Given a distance along the spline, this gets the corresponding spiral position in world space
 	UFUNCTION(BlueprintCallable, Category = "Spirals")
-		FTransform GetTransformAtDistance(float Distance);
+		FVector GetPositionAtDistance(float Distance);
 
-
-protected:
-	//helper function to get a spiral position at a given distance
-	FVector GetPositionAtDistance(float Distance);
-
-	//Given an angle between 0 and spiralCount * 360, this gives you the 3D position on the spiral
-	FVector GetPositionAtAngle(float theta);
+	//Given an angle between 0 and spiralCount * 360, this gives you the world space position on the spiral
+	UFUNCTION(BlueprintCallable, Category = "Spirals")
+		FVector GetPositionAtAngle(float theta);
 	
 
 private:
